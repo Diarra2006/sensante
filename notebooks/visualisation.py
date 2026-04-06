@@ -5,13 +5,8 @@ import seaborn as sns
 # 1. Chargement
 df = pd.read_csv('data/patients_dakar.csv')
 
-# ========================================================
-# 2. CONFIGURATION DE LA GRILLE (La correction définitive)
-# ========================================================
-# On augmente la hauteur verticale pour donner de l'air
 fig, axes = plt.subplots(2, 2, figsize=(16, 13)) 
 
-# Configuration du style
 sns.set_theme(style="whitegrid", font_scale=1.1)
 
 # Positionnement du titre principal tout en haut, sans toucher
@@ -34,21 +29,8 @@ top_regions = df['region'].value_counts().head(5)
 sns.barplot(ax=axes[1, 1], y=top_regions.index, x=top_regions.values, palette='magma')
 axes[1, 1].set_title("Top 5 Régions", fontsize=16)
 
-# 1. On place le titre plus haut (y=0.98) et on le met bien en gras
-fig.suptitle('Dashboard SénSanté - Analyse Complète', fontsize=22, y=0.98, fontweight='bold')
+plt.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.88,     wspace=0.3,   hspace=0.5 )
 
-# 2. RÉGLAGE MANUEL DES ESPACES (La clé est ici)
-# On descend légèrement le contenu des graphiques (top=0.90) pour laisser respirer le titre
-plt.subplots_adjust(
-    left=0.1, 
-    right=0.95, 
-    bottom=0.1, 
-    top=0.88,     # On baisse le plafond des graphiques
-    wspace=0.3,   # Espace entre gauche et droite
-    hspace=0.5    # Espace entre haut et bas (pour les titres du milieu)
-)
-
-# 4. Sauvegarde
 plt.savefig("notebooks/dashboard_final_propre.png")
 print("Dashboard sauvegardé proprement dans notebooks !")
 
