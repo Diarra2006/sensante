@@ -31,7 +31,7 @@ axes[1, 1].set_title("Top 5 Régions", fontsize=16)
 
 plt.subplots_adjust(left=0.1, right=0.95, bottom=0.1, top=0.88,     wspace=0.3,   hspace=0.5 )
 
-plt.savefig("notebooks/dashboard_final_propre.png")
-print("Dashboard sauvegardé proprement dans notebooks !")
+plt.savefig("figures/dashboard_final.png")
+print("Dashboard sauvegardé proprement dans figures !")
 
 plt.show()
