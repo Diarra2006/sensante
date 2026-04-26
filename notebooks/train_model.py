@@ -146,3 +146,75 @@ print ( f"\nProbabilites par classe :")
 for classe , proba in zip( model_loaded . classes_ , probas ) :
     bar = '#' * int( proba * 30)
     print ( f" { classe :8s} : { proba :.1%} {bar}")
+    
+importances = model.feature_importances_
+for name, imp in sorted(zip(feature_cols, importances),
+key=lambda x: x[1], reverse=True):
+    print(f" {name:20s} : {imp:.3f}")
+
+# Creation de trois patients fictifs avec des profils differents
+patients_exo2 = [
+    {'nom': 'Enfant (Sain)',
+     'age': 10,
+     'sexe': 'M',
+     'temperature': 37.0,
+     'tension_sys': 110,
+     'toux': False, 
+     'fatigue': False, 
+     'maux_tete': False,
+     'region': 'Dakar'}
+    ,
+    {'nom': 'Adulte (Fièvre)',
+     'age': 30, 
+     'sexe': 'F',
+     'temperature': 40.5, 
+     'tension_sys': 105,
+     'toux': False, 
+     'fatigue': True,
+     'maux_tete': True, 
+     'region': 'Tambacounda'}
+    ,
+    {'nom': 'Sénior (Toux)',
+     'age': 65, 
+     'sexe': 'M',
+     'temperature': 38.8, 
+     'tension_sys': 145,
+     'toux': True,
+     'fatigue': True, 
+     'maux_tete': False, 
+     'region': 'Saint-Louis'}
+]
+print("\n--- RESULTATS DES TESTS EXERCICE 2 ---")
+
+for patients in patients_exo2:
+
+    # Encoder les valeurs categoriques
+    s_enc = le_sexe_loaded.transform([patients['sexe']])[0]
+    r_enc = le_region_loaded.transform([patients['region']])[0]
+        
+    # preparer le vecteur des features
+    featues = np.array([[
+        patients['age'], 
+        s_enc, 
+        patients['temperature'], 
+        patients['tension_sys'], 
+        int(patients['toux']), 
+        int(patients['fatigue']), 
+        int(patients['maux_tete']), 
+        r_enc
+    ]])
+        
+    # Prédiction
+    diagnostic = model_loaded.predict(featues)[0]
+    probabilites = model_loaded.predict_proba(featues)[0]
+    probabilite_max = probabilites.max()
+        
+    print(f"\nProfil : {patients['nom']}")
+    print(f"Détails : {patients['sexe']}, {patients['age']} ans, {patients['temperature']}°C")
+    print(f"Diagnostic : {diagnostic}")
+    print(f"Probabilité : {proba_max:.1%}")
+    
+    print ( f"\nProbabilites par classe :")
+    for classe , probabilite in zip( model_loaded . classes_ , probabilites ) :
+        bar = '#' * int( probabilite * 30)
+        print ( f" { classe :10s} : { probabilite :.1%} {bar}")
