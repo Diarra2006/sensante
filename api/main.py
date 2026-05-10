@@ -3,6 +3,12 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 #--- Schemas Pydantic--
+class ModelInfo(BaseModel):
+    """Informations techniques sur le modèle chargé."""
+    model_type: str
+    n_estimators: int
+    classes: list[str]
+    n_features: int
 class PatientInput(BaseModel):
     """Donnees d'entree : les symptomes d'un patient."""
     age: int = Field(..., ge=0, le=120, description="Age en annees")
@@ -34,6 +40,15 @@ def health_check():
     return {
         "status": "ok",
         "message": "SenSante API is running"
+    }
+@app.get("/model-info", response_model=ModelInfo)
+def get_model_info():
+    """Renvoie les métadonnées du modèle RandomForest."""
+    return {
+        "model_type": type(model).__name__,
+        "n_estimators": model.n_estimators,
+        "classes": list(model.classes_),
+        "n_features": len(feature_cols)
     }
 import joblib
 import numpy as np
